@@ -1,0 +1,50 @@
+<html>
+	<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	</head>
+	<body>
+		<h1>Случайный горячий билет</h1>
+		<h2>Введите город отправления или назначения</h2>
+		<div id="newFlight"></div>
+		<input type="text" name="from" placeholder="Откуда">
+		<input type="text" name="to" placeholder="Куда">
+		<button id="test">Поиск</button>
+			<div id="result"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script>
+	var socket = io();
+	socket.on('slack', function (data) {
+		var elNewFlight = document.getElementById('newFlight');
+		elNewFlight.innerHTML = JSON.stringify(data.flight);
+		console.log(data);
+		socket.emit('my other event', { my: 'data'});
+	});
+</script>
+<script>
+$("#test").click(function(){
+	var a = $("input[name='from']").val();
+		$.post('/select', {a}, function(data) {
+			var array = data.fields;
+			var i;
+			for (i = 0; i < array.length; ++i) {
+    			console.log(array[i]);
+    			$("#result").append('<p>' + JSON.stringify(array[i]));
+    		}
+    		//$("#result").html('<p>' + JSON.stringify(array[0]));
+    	});
+
+var b = $("input[name='to']").val();
+		$.post('/select', {b}, function(data) {
+			var array = data.fields;
+			var i;
+			for (i = 0; i < array.length; ++i) {
+    			console.log(array[i]);
+    			$("#result").append('<p>' + JSON.stringify(array[i]));
+    		}
+    		//$("#result").html('<p>' + JSON.stringify(array[0]));
+    	});
+	});
+</script>
+</body>
+</html>
